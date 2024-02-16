@@ -22,7 +22,7 @@ public class TestsRepository : ITestsRepository
 
         var tests = await _dbContext.Tests
             .Where(t => testIds.Contains(t.Id))
-            .OrderBy(t => t.Id)
+            .OrderBy(t => t.Title)
             .Skip(amount * page)
             .Take(amount)
             .ToListAsync();

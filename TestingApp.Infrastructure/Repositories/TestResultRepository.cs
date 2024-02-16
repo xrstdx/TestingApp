@@ -1,4 +1,5 @@
-﻿using TestingApp.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using TestingApp.Domain.Entities;
 using TestingApp.Domain.Interfaces;
 using TestingApp.Infrastructure.Contexts;
 
@@ -15,5 +16,17 @@ public class TestResultRepository : ITestResultRepository
     {
         _dbContext.TestResults.Add(testResult);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<TestResult>> GetAllPaginatedAsync(Guid userId, int amount, int page)
+    {
+        var testResults = await _dbContext.TestResults
+            .Where(tr => tr.UserId == userId)
+            .OrderByDescending(tr => tr.Grade)
+            .Skip(amount * page)
+            .Take(amount)
+            .ToListAsync();
+
+        return testResults;
     }
 }

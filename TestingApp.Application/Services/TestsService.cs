@@ -35,6 +35,21 @@ public class TestsService : ITestsService
         return tests;
     }
 
+    public async Task<List<TestResult>> GetAllTestResultsAsync(string userId, int amount, int page)
+    {
+        if (string.IsNullOrEmpty(userId))
+            throw new AccessForbiddenException();
+
+        var parsedUserId = Guid.Parse(userId!);
+
+        if (!await _usersRepository.UserExistsById(parsedUserId))
+            throw new AccessForbiddenException();
+
+        var testResults = await _testResultRepository.GetAllPaginatedAsync(parsedUserId, amount, page);
+
+        return testResults;
+    }
+
     public async Task<Test> GetByIdAsync(string userId, Guid id)
     {
         if (string.IsNullOrEmpty(userId))

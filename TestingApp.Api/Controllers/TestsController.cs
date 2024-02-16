@@ -28,6 +28,15 @@ public class TestsController : ControllerBase
 
         return Ok(tests);
     }
+    [HttpGet("/results")]
+    public async Task<IActionResult> GetAllTestResults([FromQuery] int amount = 5, [FromQuery] int page = 0)
+    {
+        var user = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+
+        var testResults = await _testsService.GetAllTestResultsAsync(user.Value, amount, page);
+
+        return Ok(testResults);
+    }
 
     [HttpGet("{id:Guid}")]
     public async Task<IActionResult> GetById(Guid id)
