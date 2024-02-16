@@ -29,7 +29,6 @@ public class TestsRepository : ITestsRepository
 
         return tests;
     }
-
     public async Task<Test?> GetByIdAsync(Guid testId)
     {
         var test = await _dbContext.Tests
